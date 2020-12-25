@@ -103,12 +103,6 @@ Sudok.Shu.prototype.genRelation = function(sm) {
     }
   }
   // 当前组
-  // for (let i = 0; i < oriData.length; i++) {
-  //   const element = oriData[i];
-  //   if (element.group === this.group && (element.i !== this.x || element.j != this.y)) {
-  //     rel.push({ i: element.i, j: element.j })
-  //   }
-  // }
   sm.forEach(shu => {
     if (shu.group === this.group && (shu.x !== this.x || shu.y != this.y)) {
       if (!rel.some(({ x, y }) => x === shu.x && y === shu.y)) {
