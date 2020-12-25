@@ -1,0 +1,173 @@
+<html>
+  <head>
+    <title>sudoku</title>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width" />
+    <style type="text/css">
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      .container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .title {
+        font-size: 18px;
+        font-weight: bold;
+        margin: 30px 0;
+      }
+      .footer {
+        margin: 30px 0;
+      }
+      .box {
+        position: relative;
+        display: flex;
+        flex-wrap: wrap;
+        width: 91px;
+        height: 91px;
+        border-bottom: 1px solid #ccc;
+        border-right: 1px solid #ccc;
+        background-color: rgba(255,255,255,0.5);
+      }
+      .square {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 30px;
+        height: 30px;
+        border-top: 1px solid #ccc;
+        border-left: 1px solid #ccc;
+      }
+      .row {
+        position: relative;
+        display: flex;
+        flex-wrap: wrap;
+        width: 271px;
+        height: 30px;
+        border-right: 1px solid #ccc;
+      }
+      .button {
+        padding: 5px 20px;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+        text-align: center;
+      }
+      .group {
+        display: flex;
+        flex-wrap: wrap;
+        width: 273px;
+        width: 273px;
+      }
+      .spin {
+        position: absolute;
+        z-index: -1;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 40px;
+        font-weight: bold;
+        color: #ccc;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script crossorigin src="./lib/react.development.js"></script>
+    <script crossorigin src="./lib/react-dom.development.js"></script>
+    <script crossorigin src="./lib/babel.min.js"></script>
+
+    <script crossorigin type="text/babel" src="./shu.js"></script>
+    <script crossorigin type="text/babel" src="./shu_manage.js"></script>
+    <script type="text/babel" id="components">
+      function Square({ num }) {
+        return <div className="square" >{ num }</div>
+      }
+
+      function Box({ index = 1, numArr = [] }) {
+        return(
+          <div className="box">
+            <div className="spin">{index}</div>
+            {numArr.map(num => {
+              return (
+                <Square key={num.id} num={num.aNum} />
+              )
+            })}
+          </div>
+        )
+      }
+
+      function Row({ index = 1, numArr = [] }) {
+        return(
+          <div className="row">
+            {numArr.map(num => {
+              return (
+                <Square key={num.aNum} num={num.aNum} />
+              )
+            })}
+          </div>
+        )
+      }
+
+      function BoxGroup({ twoNums }) {
+        return (
+          <div className="group">
+            {twoNums.map((numArr, i) => {
+              return <Box key={i} index={i + 1} numArr={numArr} />
+            })}
+          </div>
+        )
+      }
+
+      function Title() {
+        return <div className="title">Sudoku</div>
+      }
+
+      function Button({ text, onClick }) {
+        return <div className="button" onClick={onClick} >{text}</div>
+      }
+
+      function Footer({ genNext }) {
+        return(
+          <div className="footer">
+            <Button text="点击生成" onClick={genNext} />
+          </div>
+        )
+      }
+
+      function Container({ children }) {
+        return (
+          <div className="container">{children}</div>
+        )
+      }
+    </script>
+    <script type="text/babel">
+      let sm = new Sudok.ShuManage()
+
+      function App() {
+        const [twoNums, setTwoNums] = React.useState(sm.happy())
+
+        const generateNextTwoNums = () => {
+          setTwoNums(sm.happy())
+        }
+
+        return(
+          <Container>
+            <Title />
+            <Footer genNext={generateNextTwoNums} />
+            <BoxGroup twoNums={twoNums} />
+          </Container>
+        )
+      }
+
+      ReactDOM.render(<App />, document.getElementById('app'))
+    </script>
+  </body>
+</html>
